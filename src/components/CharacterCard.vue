@@ -1,4 +1,5 @@
 <template>
+
 <div class="flex w-[600px] rounded-xl overflow-hidden items-center bg-card-bg h-[215px] shadow-xl relative sm:w[100px] sm:flex-col sm:h-[540px]">
 
   <div class="text-lg w-5/12 sm:w-full sm:overflow-hidden sm:max-h-[60%]"><img class="min-h-full absolute top-0 left-0 bg-no-repeat w-[40%] sm:min-w-full sm:relative sm:bg-cover" :src=character.image alt=""></div>

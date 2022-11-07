@@ -15,8 +15,11 @@
   </div>
 
 
-      <my-content v-if="!isCardsLoading" class="py-16" :cards="sortedCards"/>
-      <div v-else class="pt-12 text-center text-2xl italic min-h-screen bg-content-bg text-pink-200">Cards loading...</div>
+        <my-content v-if="!isCardsLoading" class="py-16" :cards="sortedCards"/>
+        <div v-else class="pt-12 text-center text-2xl italic min-h-screen bg-content-bg text-pink-200">Cards loading...</div>
+
+
+
 
   <div class="flex justify-center bg-content-bg py-20">
     <my-footer/>
@@ -71,7 +74,7 @@ export default defineComponent({
     async fetchCards() {
       try {
         this.isCardsLoading = true;
-        const response = await axios.get('https://rickandmortyapi.com/api/character/1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20')
+        const response = await axios.get('https://rickandmortyapi.com/api/character/1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,183')
 
         response.data.forEach((el: any) => {
           const slashIndex: number = el.episode[0].lastIndexOf('/') + 1;
@@ -154,6 +157,6 @@ export default defineComponent({
   },
 
 })
-
 </script>
+
 
