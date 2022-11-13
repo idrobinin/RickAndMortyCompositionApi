@@ -1,31 +1,33 @@
 <template>
-
-    <input :value="modelValue" @input="updateInput" @focus="focused" @blur="focusOut" placeholder="Searching by name">
-
+  <input
+    :value="modelValue"
+    @input="updateInput"
+    @focus="focused"
+    @blur="focusOut"
+    placeholder="Searching by name"
+  />
 </template>
 
 <script lang="ts">
-import {defineComponent} from "vue";
+import { defineComponent } from "vue";
 
-export default defineComponent(
-    {
-      name: "MyInput",
-      props:{
-        modelValue:String,
-      },
-      methods:{
-        updateInput(e:any){
-          this.$emit('update:modelValue',e.target.value)
-        },
-        focused() {
-          this.$emit('focus')
-        },
-        focusOut() {
-          this.$emit('focusOut')
-        }
-      },
-
-    })
+export default defineComponent({
+  name: "MyInput",
+  props: {
+    modelValue: String,
+  },
+  methods: {
+    updateInput(e: any) {
+      this.$emit("update:modelValue", e.target.value);
+    },
+    focused() {
+      this.$emit("focus");
+    },
+    focusOut() {
+      this.$emit("focusOut");
+    },
+  },
+});
 </script>
 
 <style scoped>

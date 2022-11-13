@@ -1,8 +1,8 @@
 interface Checkbox {
-    name : string,
-    id : string,
-    value: string,
-    label: string
+  name: string;
+  id: string;
+  value: string;
+  label: string;
 }
 
-export default Checkbox
+export default Checkbox;
