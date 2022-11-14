@@ -1,4 +1,12 @@
-interface Cards {
+type Loc = {
+  [key: string]: string;
+};
+
+interface IObjectKeys {
+  [key: string]: string | number | Loc;
+}
+
+interface Cards extends IObjectKeys {
   id: number | string;
   status: string;
   location: {

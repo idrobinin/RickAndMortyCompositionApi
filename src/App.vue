@@ -48,7 +48,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
+import { defineComponent } from "vue";
 import MyHeader from "@/components/MyHeader.vue";
 import MyContent from "@/components/MyContent.vue";
 import MySelect from "@/components/UI/MySelect.vue";
@@ -171,14 +171,14 @@ export default defineComponent({
     // сортировка по имени или номеру эпизода
     sortedCards(): Cards[] {
       if (this.selectedOption !== "firstEpisodeOfCharacter") {
-        return [...this.cards].sort((card1: any, card2: any) => {
+        return [...this.cards].sort((card1: any, card2: Cards) => {
           return card1[this.selectedOption]?.localeCompare(
             card2[this.selectedOption]
           );
         });
       } else {
-        return [...this.cards].sort((card1: any, card2: any) => {
-          return card1[this.selectedOption] - card2[this.selectedOption];
+        return [...this.cards].sort((card1: Cards, card2: Cards) => {
+          return +card1[this.selectedOption] - +card2[this.selectedOption];
         });
       }
     },
