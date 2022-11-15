@@ -57,6 +57,7 @@ import MyButton from "@/components/UI/MyButton.vue";
 import MyFooter from "@/components/MyFooter.vue";
 import axios from "axios";
 import Cards from "@/types/Cards";
+import EpisodesObj from "@/types/Episodes";
 
 export default defineComponent({
   name: "App",
@@ -98,7 +99,7 @@ export default defineComponent({
     async fetchCards() {
       try {
         this.isCardsLoading = true;
-        const response = await axios.get(
+        const response = await axios.get<Cards[]>(
           "https://rickandmortyapi.com/api/character/1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,183"
         );
 
@@ -123,10 +124,11 @@ export default defineComponent({
     // получаем массив эпизодов
     async fetchLastSeenPlace() {
       try {
-        const response = await axios.get(
+        const response = await axios.get<EpisodesObj>(
           "https://rickandmortyapi.com/api/episode/"
         );
         this.episodesArr = response.data.results;
+        console.log(response.data);
         this.episodesArr.forEach((el) => {
           this.episodes.push(el["name"]);
         });
@@ -169,16 +171,16 @@ export default defineComponent({
   },
   computed: {
     // сортировка по имени или номеру эпизода
-    sortedCards(): Cards[] {
+    sortedCards(): Array<Cards> {
       if (this.selectedOption !== "firstEpisodeOfCharacter") {
-        return [...this.cards].sort((card1: any, card2: Cards) => {
+        return [...this.cards].sort((card1, card2) => {
           return card1[this.selectedOption]?.localeCompare(
             card2[this.selectedOption]
           );
         });
       } else {
-        return [...this.cards].sort((card1: Cards, card2: Cards) => {
-          return +card1[this.selectedOption] - +card2[this.selectedOption];
+        return [...this.cards].sort((card1, card2) => {
+          return card1[this.selectedOption] - card2[this.selectedOption];
         });
       }
     },
