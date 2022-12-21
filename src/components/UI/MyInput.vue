@@ -8,26 +8,25 @@
   />
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
+import { defineProps, defineEmits } from "vue";
 
-export default defineComponent({
-  name: "MyInput",
-  props: {
-    modelValue: String,
-  },
-  methods: {
-    updateInput(e: any) {
-      this.$emit("update:modelValue", e.target.value);
-    },
-    focused() {
-      this.$emit("focus");
-    },
-    focusOut() {
-      this.$emit("focusOut");
-    },
-  },
+const props = defineProps({
+  modelValue: String,
 });
+
+const emit = defineEmits(["update:modelValue", "focus", "focusOut"]);
+
+const updateInput = (e: Event) => {
+  const el = e.target as HTMLInputElement;
+  emit("update:modelValue", el.value);
+};
+const focused = () => {
+  emit("focus");
+};
+const focusOut = () => {
+  emit("focusOut");
+};
 </script>
 
 <style scoped>

@@ -60,13 +60,3 @@
     </div>
   </div>
 </template>
-
-<script>
-import { defineComponent } from "vue";
-
-export default defineComponent({
-  name: "my-footer",
-});
-</script>
-
-<style scoped></style>

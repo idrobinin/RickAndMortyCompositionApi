@@ -19,27 +19,21 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from "vue";
+<script setup lang="ts">
+import { defineProps, PropType } from "vue";
 import CharacterCard from "@/components/CharacterCard.vue";
 import Cards from "@/types/Cards";
 
-export default defineComponent({
-  name: "MyContent",
-  components: { CharacterCard },
-
-  props: {
-    cards: {
-      type: Array as PropType<Cards[]>,
-      required: true,
-    },
-  },
-  methods: {
-    dotClasses(status: string) {
-      return status == "Dead" ? "red" : "green";
-    },
+const props = defineProps({
+  cards: {
+    type: Array as PropType<Cards[]>,
+    required: true,
   },
 });
+
+const dotClasses = (status: string) => {
+  return status == "Dead" ? "red" : "green";
+};
 </script>
 
 <style scoped>

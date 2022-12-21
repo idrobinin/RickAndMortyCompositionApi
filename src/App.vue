@@ -47,150 +47,48 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
+import { ref, watch } from "vue";
 import MyHeader from "@/components/MyHeader.vue";
 import MyContent from "@/components/MyContent.vue";
 import MySelect from "@/components/UI/MySelect.vue";
 import MyInput from "@/components/UI/MyInput.vue";
 import MyButton from "@/components/UI/MyButton.vue";
 import MyFooter from "@/components/MyFooter.vue";
-import axios from "axios";
 import Cards from "@/types/Cards";
-import EpisodesObj from "@/types/Episodes";
+import { usePosts } from "@/hooks/usePosts";
+import { useSortedCards } from "@/hooks/useSortedCards";
+import { useNameSearching } from "@/hooks/useNameSearching";
 
-export default defineComponent({
-  name: "App",
-  components: {
-    MyHeader,
-    MyContent,
-    MySelect,
-    MyInput,
-    MyButton,
-    MyFooter,
-  },
-  data() {
-    return {
-      cards: [],
-      defaultCards: [],
-      isCardsLoading: false,
-      episodesArr: [],
-      episodes: [],
-      locationList: [],
+//пропсы для сортировки
 
-      //пропсы для сортировки
-      selectedOption: "",
-      sortOptions: [
-        { value: "name", name: "by name" },
-        { value: "firstEpisodeOfCharacter", name: "by episode" },
-      ],
+const sortOptions = [
+  { value: "name", name: "by name" },
+  { value: "firstEpisodeOfCharacter", name: "by episode" },
+];
 
-      //пропсы для фтильтра
-      sortBy: "Sort by",
-      filterBy: "Choose location",
-      selectedEpisode: "",
+//пропсы для фтильтра
+const sortBy = "Sort by";
+const filterBy = "Choose location";
+const selectedEpisode = ref("");
 
-      //пропс для поиска по имени
-      searchedName: "",
-    };
-  },
-  methods: {
-    // получаем массив с героями и их характеристиками
-    async fetchCards() {
-      try {
-        this.isCardsLoading = true;
-        const response = await axios.get<Cards[]>(
-          "https://rickandmortyapi.com/api/character/1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,183"
-        );
+const { cards, defaultCards, isCardsLoading, getData, locationList } =
+  usePosts();
+const { selectedOption, sortedCards } = useSortedCards(cards);
+const { searchedName, searchedByName } = useNameSearching(cards, defaultCards);
 
-        response.data.forEach((el: Cards) => {
-          const slashIndex: number = el.episode[0].lastIndexOf("/") + 1;
-          const firstEpisodeNum: number = +el.episode[0].slice(slashIndex);
-          el.firstEpisode = this.episodes[firstEpisodeNum - 1];
-          el.firstEpisodeOfCharacter = firstEpisodeNum;
+// сбрасываем все фильтры (не уверен в правильности этого решения)
+const resetAllFilters = () => {
+  location.reload();
+};
 
-          //массив эпизодов героев на странице
-          this.locationList.push(el["location"]["name"]);
-        });
-        // получаем данные в основную модель
-        this.cards = response.data;
-        // запасная модель
-        this.defaultCards = this.cards;
-        this.isCardsLoading = false;
-      } catch (error: any) {
-        throw new Error(error);
-      }
-    },
-    // получаем массив эпизодов
-    async fetchLastSeenPlace() {
-      try {
-        const response = await axios.get<EpisodesObj>(
-          "https://rickandmortyapi.com/api/episode/"
-        );
-        this.episodesArr = response.data.results;
-        console.log(response.data);
-        this.episodesArr.forEach((el) => {
-          this.episodes.push(el["name"]);
-        });
-      } catch (error: any) {
-        throw new Error(error);
-      }
-    },
-    // создаем массив (пропс) для options по эпизоду
-    getData(arrArrs: string[]) {
-      const newArr = [...new Set(arrArrs)];
-      return newArr.map((val) => ({
-        ["name"]: val.toString(),
-        ["value"]: val.toString(),
-      }));
-    },
-
-    // поиск по имени
-    searchedByName() {
-      this.cards = this.defaultCards.filter((el) =>
-        el["name"].toLowerCase().includes(this.searchedName.toLowerCase())
-      );
-    },
-
-    // сбрасываем все фильтры (не уверен в правильности этого решения)
-    resetAllFilters() {
-      location.reload();
-    },
-  },
-  watch: {
-    // фильтр по эпизоду
-    selectedEpisode(newValue: string) {
-      if (newValue) {
-        this.cards = this.defaultCards;
-        this.cards = this.cards.filter(
-          (el: Cards) => el["location"]["name"] === newValue
-        );
-        this.searchedName = "";
-      }
-    },
-  },
-  computed: {
-    // сортировка по имени или номеру эпизода
-    sortedCards(): Array<Cards> {
-      if (this.selectedOption !== "firstEpisodeOfCharacter") {
-        return [...this.cards].sort((card1, card2) => {
-          return card1[this.selectedOption]?.localeCompare(
-            card2[this.selectedOption]
-          );
-        });
-      } else {
-        return [...this.cards].sort((card1, card2) => {
-          return card1[this.selectedOption] - card2[this.selectedOption];
-        });
-      }
-    },
-  },
-
-  mounted() {
-    this.fetchCards();
-  },
-  beforeMount() {
-    this.fetchLastSeenPlace();
-  },
+watch(selectedEpisode, (newValue: string) => {
+  if (newValue) {
+    cards.value = defaultCards.value;
+    cards.value = cards.value.filter(
+      (el: Cards) => el["location"]["name"] === newValue
+    );
+    searchedName.value = "";
+  }
 });
 </script>

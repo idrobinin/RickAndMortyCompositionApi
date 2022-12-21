@@ -53,13 +53,3 @@
     </div>
   </div>
 </template>
-
-<script>
-import { defineComponent } from "vue";
-
-export default defineComponent({
-  name: "my-header",
-});
-</script>
-
-<style scoped></style>

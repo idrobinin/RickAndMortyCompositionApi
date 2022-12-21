@@ -39,26 +39,22 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, PropType } from "vue";
+<script setup lang="ts">
+import { PropType, defineProps } from "vue";
 import Cards from "@/types/Cards";
 
-export default defineComponent({
-  name: "CharacterCard",
-
-  props: {
-    character: {
-      type: Object as PropType<Cards>,
-      required: true,
-    },
-    firstEpisode: {
-      type: String,
-      default: "no info",
-    },
-    dotStyles: {
-      type: String,
-      required: true,
-    },
+const props = defineProps({
+  character: {
+    type: Object as PropType<Cards>,
+    required: true,
+  },
+  firstEpisode: {
+    type: String,
+    default: "no info",
+  },
+  dotStyles: {
+    type: String,
+    required: true,
   },
 });
 </script>
